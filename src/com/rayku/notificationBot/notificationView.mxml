@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="320"
+		 height="190"
+		 initialize="init()" xmlns:notificationBot="com.rayku.notificationBot.*"
+		 >
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.darkGrey {
+			fontWeight:bold;
+			color: #333;
+			fontSize: 12px;
+			fontFamily: Myriad;
+		}
+		
+		#question_body {
+			color: #1A5178;
+			fontSize: 27px; 
+			fontWeight: bold;
+			fontFamily: Myriad;
+		}
+		
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.rayku.notificationBot.model.Question;
+			
+			[Bindable]
+			public var question:Question;
+			
+			public var onClose:Function;
+			
+			[Bindable]
+			private var timeLeft:String;
+			
+			private var inSeconds:Number;
+			
+			private function init():void{
+				var minutes:Number = question.timeLeft - 1;
+				inSeconds = question.timeLeft * 60;
+				
+				timeLeft = minutes + ":00";
+
+				var timer:Timer = new Timer(1000, inSeconds);
+				var notification:notificationView = this;
+				
+				timer.addEventListener(TimerEvent.TIMER, function():void{
+					inSeconds = inSeconds - 1;
+					var sec:Number = inSeconds % 60;
+					if (sec == 0) minutes = minutes - 1;
+					
+					var complement:String = ":";
+					
+					if (sec < 10){
+						complement = ":0";
+					}
+					timeLeft = minutes + complement + sec;
+				});
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, function():void{
+					onClose.call(notification, notification);
+				});
+				timer.start();
+			}
+			
+			private function closed():void{
+				onClose.call(this, this);
+			}
+			
+			private function connect():void{
+				var urlReq:URLRequest = new URLRequest(question.getUrl); 
+				navigateToURL(urlReq, '_blank');
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Image x="0" y="0" smooth="true" source="@Embed('/assets/images/notification-background.png')"/>
+	
+	<s:Label id="newQuestion" x="11" y="9" fontWeight="normal" styleName="darkGrey" text="new question"/>
+	<s:Label id="question_body" x="31" y="33" width="260" fontWeight="normal"
+			 text="{question.getBody}"/>
+	<s:Label x="30" y="99" fontWeight="normal" styleName="darkGrey" text="{question.getGrade}"/>
+	<s:Label x="20" y="133" color="#FFFFFF" fontSize="27" fontWeight="bold" text="{timeLeft}"/>
+	
+	
+	<s:Label x="104" y="132" width="81" fontWeight="normal" styleName="darkGrey"
+			 text="until question expires"/>	
+	
+	<s:Image x="290" y="10" source="assets/images/close.png" mouseChildren="true" buttonMode="true" click="closed()"/>
+	<s:Image x="194" y="128" source="assets/images/connect.png" mouseChildren="true" buttonMode="true" click="connect();" />
+</s:Group>

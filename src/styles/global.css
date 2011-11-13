@@ -1,0 +1,33 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+@font-face { 
+	src: url("../assets/fonts/MyriadPro-Semibold.otf"); 
+	fontFamily: Myriad; 
+	embedAsCFF: true; 
+}
+
+@font-face {
+	src: url("../assets/fonts/MyriadPro-Bold.otf"); 
+	fontFamily: MyriadBold; 
+	embedAsCFF: true;
+}
+
+@font-face {
+	src: url("../assets/fonts/MyriadPro-BoldIt.otf"); 
+	fontFamily: MyriadBoldIt; 
+	embedAsCFF: true;
+}
+
+s|Label {
+	color: #fff;
+	fontSize: 16px;
+	fontWeight: bold;
+	fontFamily: Myriad;
+}
+
+s|TextInput {
+	fontSize: 24px;
+	fontFamily: Myriad;
+}

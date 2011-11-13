@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:notificationBot="com.rayku.notificationBot.*"
+		 width="380"
+		 height="620"
+		 initialize="init();"
+		 >
+
+    <fx:Declarations>
+        <mx:HTTPService id="notificationService" method="GET" url="http://localhost:4567/tutor/{email}/notification?token={token}" resultFormat="text" showBusyCursor="true" fault="onFault(event)" result="onNotification(event)" />
+    </fx:Declarations>
+
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			import com.rayku.notificationBot.model.Question;
+			
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+
+			[Bindable]
+            public var email:String;
+			
+			[Bindable]
+            public var token:String;
+			
+			[Bindable]
+			private var empty:Boolean = true;
+			
+			public function init():void {
+				var timer:Timer = new Timer(5000);
+				timer.addEventListener(TimerEvent.TIMER, function():void {
+					notificationService.send();
+				});
+				timer.start();
+			}
+
+            private function onFault(event:FaultEvent):void {}
+
+            private function onNotification(event:ResultEvent):void {
+				var json:String = event.result as String;
+				if (json != ''){
+	                var rawQuestion:Object = JSON.decode(json);
+					addQuestion(rawQuestion);
+				}
+            }
+			
+			private function closeNotification(notification:notificationView):void{
+				if (notifications.contains(notification))
+					notifications.removeElement(notification);
+				if (notifications.numChildren == 0) 
+					empty = true;
+			}
+			
+			private function addQuestion(rawQuestion:Object):void {
+				var question:Question = new Question(rawQuestion.body, rawQuestion.grade, rawQuestion.timeLeft as Number, rawQuestion.link);
+				var notification:notificationView = new notificationView();
+				notification.question = question;
+				notification.onClose = this.closeNotification;
+				notifications.addElementAt(notification,0);
+				empty = false;
+			}
+		
+		]]>
+	</fx:Script>
+	
+	<s:Image x="101" y="328" smooth="true" smoothingQuality="high" source="@Embed('/assets/images/fade-logo.png')"/>
+
+	<s:Scroller y="25" horizontalCenter="0" >
+		<s:VGroup gap="30" maxHeight="580" id="notifications">	
+		</s:VGroup>
+	</s:Scroller>
+	
+	
+	<s:Label x="49" y="38" width="282" fontSize="27" text="You don't  have any question now." visible="{empty}"/>
+	<s:Label x="49" y="115" width="283" fontSize="12" visible="{empty}"
+			 text="this application will let you know as soon as a new question arrives."/>
+	
+</s:Group>
