@@ -8,16 +8,14 @@
 		 >
 	
 	<fx:Declarations>
-		<s:HTTPService id="loginService" method="POST" url="http://notification-bot.rayku.com/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
+		<s:HTTPService id="loginService" method="POST" url="http://localhost:4567/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.utils.Base64Encoder;
+			
 			
 			public var onLogin:Function;
 			

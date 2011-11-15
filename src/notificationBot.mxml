@@ -4,16 +4,34 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   showStatusBar="false" xmlns:notificationBot="com.rayku.notificationBot.*"
 					   backgroundColor="#1D5B8D"
+					   initialize="init()"
 					   >
 	<fx:Style source="styles/global.css" />
 	
+	<fx:Declarations>
+		<mx:HTTPService id="statusService" method="POST" url="http://localhost:4567/tutor/{email}/ping?token={token}" showBusyCursor="false" fault="return;"  />
+	</fx:Declarations>
+	
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
+			
             [Bindable]
             private var email:String;
             [Bindable]
             private var token:String;
+		
+			
+			private function init():void{
+				var nativeApp:NativeApplication = NativeApplication.nativeApplication;
+				
+				nativeApp.idleThreshold = 120;
+				nativeApp.addEventListener(Event.USER_IDLE, function():void{
+					statusService.send({status: 'idle'});
+				});
+				nativeApp.addEventListener(Event.USER_PRESENT, function():void{
+					statusService.send({status: 'available'});
+				});
+			}
 			
 			private function loadPreferences():void{
 				var appStorage:File = File.applicationStorageDirectory;
@@ -66,7 +84,7 @@
             <notificationBot:login id="loginComponent" initialize="loadPreferences()" onLogin="{logged}" />
         </s:NavigatorContent>
         <s:NavigatorContent id="main">
-            <notificationBot:notificationArea email="{email}" token="{token}" />
+            <notificationBot:notificationArea email="{email}"  token="{token}" />
         </s:NavigatorContent>
     </mx:ViewStack>
 

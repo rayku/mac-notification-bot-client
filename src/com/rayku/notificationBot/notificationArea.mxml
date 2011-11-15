@@ -9,13 +9,14 @@
 
     <fx:Declarations>
         <mx:HTTPService id="notificationService" method="GET" url="http://localhost:4567/tutor/{email}/notification?token={token}" resultFormat="text" showBusyCursor="true" fault="onFault(event)" result="onNotification(event)" />
-    </fx:Declarations>
+	</fx:Declarations>
 
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.serialization.json.JSON;
 			import com.rayku.notificationBot.model.Question;
 			
+			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 
