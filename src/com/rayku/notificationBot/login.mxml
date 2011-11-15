@@ -6,9 +6,9 @@
 		 xmlns:notificationBot="com.rayku.notificationBot.*"
 		 creationComplete="this.email.setFocus()"
 		 >
-
+	
 	<fx:Declarations>
-		<s:HTTPService id="loginService" method="POST" url="http://localhost:4567/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
+		<s:HTTPService id="loginService" method="POST" url="http://notification-bot.rayku.com/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -24,7 +24,10 @@
 			[Bindable]
 			private var loginFailed:Boolean = false;
 			
-			private function doLogin(e:Event):void{
+			[Bindable]
+			private var storeInfo:Boolean;
+			
+			public function doLogin(e:Event):void{
 				loading = true;
 				loginService.send({email: email.text, password: password.text});
 			}
@@ -40,7 +43,7 @@
 			
 			
 			protected function onResult(event:ResultEvent):void {
-				onLogin.call(this, email.text, event.result as String);
+				onLogin.call(this, email.text, password.text, event.result as String, stored.selected);
 			}
 			
 		]]>
@@ -48,16 +51,18 @@
 	
 	<s:Image source="assets/images/background.png"/>	
 	
-	<s:Label x="65" y="413" fontWeight="normal" text="email address"/>
-	<s:TextInput id="email" enter="doLogin(event)" width="250" height="35" x="65" y="433" />
+	<s:Label x="65" y="396" fontWeight="normal" text="email address"/>
+	<s:TextInput id="email" enter="doLogin(event)" width="250" height="35" x="65" y="416" />
 	
-	<s:Label x="65" y="483" fontWeight="normal" text="password"/>
-	<s:TextInput id="password" enter="doLogin(event)" displayAsPassword="true" width="250" height="35" x="65" y="503" />
+	<s:Label x="65" y="466" fontWeight="normal" text="password"/>
+	<s:TextInput id="password" enter="doLogin(event)" displayAsPassword="true" width="250" height="35" x="65" y="486" />
 	
 	<notificationBot:button x="231" y="557" click="doLogin(event)"/>
-	<s:Label visible="{loginFailed}" x="49" y="344" width="282" color="#FF8282" fontSize="20"
+	<s:Label visible="{loginFailed}" x="49" y="335" width="282" color="#FF8282" fontSize="20"
 			 fontWeight="normal" fontFamily="Myriad" text="Your credentials don't match.&#xd;Please try again."
 			 textAlign="center"/>
+	<s:CheckBox x="65" y="529" id="stored" selected="true"/>
+	<s:Label x="82" y="534" fontSize="12" click="stored.selected = !stored.selected" text="save my credentials and start at login"/>
 	
 	<s:Image visible="{this.loading}" smooth="true" source="assets/images/loading-background.png"/>
 </s:Group>

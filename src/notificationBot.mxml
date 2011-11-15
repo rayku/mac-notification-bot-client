@@ -9,26 +9,61 @@
 	
 	<fx:Script>
 		<![CDATA[
-			
-
+			import mx.controls.Alert;
             [Bindable]
             private var email:String;
             [Bindable]
             private var token:String;
-
-
 			
-			private function logged(email:String, accessToken:String):void{
+			private function loadPreferences():void{
+				var appStorage:File = File.applicationStorageDirectory;
+				appStorage = appStorage.resolvePath("preferences.txt");
+				
+				if (appStorage.exists && nativeApplication.startAtLogin) {
+					var stream:FileStream = new FileStream();
+					stream.open(appStorage, FileMode.READ);
+					var contentString:String = stream.readUTFBytes(stream.bytesAvailable).toString();
+					var contents:Array= contentString.split(",");
+					
+					var email:String = contents[0].toString();
+					var password:String = contents[1].toString();
+					doLogin(email, password);
+				}
+			}
+			
+			private function logged(email:String, password:String, accessToken:String, storeCredentials:Boolean):void{
                 viewStack.selectedChild = main;
                 this.email = email;
                 this.token = accessToken;
+				nativeApplication.startAtLogin = storeCredentials;
+				savePreferences(email, password);
 			}
+			
+			private function savePreferences(email:String, password:String):void{
+				var appStorage:File = File.applicationStorageDirectory;
+				appStorage = appStorage.resolvePath("preferences.txt");
+				save(appStorage, email + ',' + password);
+			}
+			
+			private function save(file:File, content:String):void{
+				var stream:FileStream = new FileStream();
+				stream.open(file, FileMode.WRITE);
+				stream.writeUTFBytes(content);
+				stream.close();
+			}
+			
+			private function doLogin(email:String, password:String):void{
+				loginComponent.email.text = email;
+				loginComponent.password.text = password;
+				loginComponent.doLogin(null);
+			}
+			
 		]]>
 	</fx:Script>
 
     <mx:ViewStack id="viewStack">
         <s:NavigatorContent id="login">
-            <notificationBot:login onLogin="{logged}" />
+            <notificationBot:login id="loginComponent" initialize="loadPreferences()" onLogin="{logged}" />
         </s:NavigatorContent>
         <s:NavigatorContent id="main">
             <notificationBot:notificationArea email="{email}" token="{token}" />
