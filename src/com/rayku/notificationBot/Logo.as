@@ -7,7 +7,7 @@ package com.rayku.notificationBot
 		
 	public class Logo{
 		
-		[Embed(source='assets/images/logo.png')]
+		[Embed(source='assets/images/logo128.png')]
 		private var Image128:Class;		
 		public var bmp:BitmapData;
 		

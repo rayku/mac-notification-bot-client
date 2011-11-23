@@ -125,74 +125,10 @@
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 	specify the path to a PNG file included in the AIR package. Optional. -->
-	<!--<icon>
-		<image128x128>assets/images/logo.png</image128x128>
+	<icon>
+		<image128x128>assets/images/logo128.png</image128x128>
 	</icon>
 
-	--><!-- Whether the application handles the update when a user double-clicks an update version
-	of the AIR file (true), or the default AIR application installer handles the update (false).
-	Optional. Default false. -->
-	<!-- <customUpdateUI></customUpdateUI> -->
-	
-	<!-- Whether the application can be launched when the user clicks a link in a web browser.
-	Optional. Default false. -->
 	<allowBrowserInvocation>true</allowBrowserInvocation> 
-	<!-- Listing of file types for which the application can register. Optional. -->
 	
-	<fileTypes>
-        <fileType>
-            <name>rayku.appDoc</name>
-            <extension>rayku</extension>
-            <description>Rayku's application document</description>
-            <contentType>application/vnd.rayku.app-doc</contentType>
-            <icon>
-                <image128x128>assets/images/logo.png</image128x128>
-            </icon>
-        </fileType>
-    </fileTypes>
-	
-    <!-- iOS specific capabilities -->
-	<!-- <iPhone> -->
-		<!-- A list of plist key/value pairs to be added to the application Info.plist -->
-		<!-- <InfoAdditions>
-            <![CDATA[
-                <key>UIDeviceFamily</key>
-                <array>
-                    <string>1</string>
-                    <string>2</string>
-                </array>
-                <key>UIStatusBarStyle</key>
-                <string>UIStatusBarStyleBlackOpaque</string>
-                <key>UIRequiresPersistentWiFi</key>
-                <string>YES</string>
-            ]]>
-        </InfoAdditions> -->
-        <!-- <requestedDisplayResolution></requestedDisplayResolution> -->
-	<!-- </iPhone> -->
-
-	<!-- Specify Android specific tags that get passed to AndroidManifest.xml file. -->
-	<!--<android> 
-		<manifestAdditions>
-		<![CDATA[
-			<manifest android:installLocation="auto">
-				<uses-permission android:name="android.permission.INTERNET"/>
-				<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-				<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-				<uses-configuration android:reqFiveWayNav="true"/>
-				<supports-screens android:normalScreens="true"/>
-				<uses-feature android:required="true" android:name="android.hardware.touchscreen.multitouch"/>
-				<application android:enabled="true">
-					<activity android:excludeFromRecents="false">
-						<intent-filter>
-							<action android:name="android.intent.action.MAIN"/>
-							<category android:name="android.intent.category.LAUNCHER"/>
-						</intent-filter>
-					</activity>
-				</application>
-			</manifest>
-		]]>
-		</manifestAdditions> 
-	</android> -->
-	<!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
-
 </application>
