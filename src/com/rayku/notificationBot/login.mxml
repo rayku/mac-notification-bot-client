@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="380" height="620" 
 		 xmlns:notificationBot="com.rayku.notificationBot.*"
 		 creationComplete="this.email.setFocus()"
+		 paddingTop="5"
 		 >
 	
 	<fx:Declarations>
-		<s:HTTPService id="loginService" method="POST" url="http://localhost:4567/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
+		<s:HTTPService id="loginService" method="POST" url="http://notification-bot.rayku.com/sign_in" fault="onFault(event)" result="onResult(event)" resultFormat="object" showBusyCursor="true"/>
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -46,21 +46,28 @@
 			
 		]]>
 	</fx:Script>
+	<s:VGroup width="100%" gap="10">
+		<s:VGroup width="100%">
+			<s:Label fontWeight="normal" text="email address"/>
+			<s:TextInput id="email" enter="doLogin(event)" width="100%" height="35" />		
+		</s:VGroup>
+		
+		<s:VGroup width="100%">
+			<s:Label fontWeight="normal" text="password"/>
+			<s:TextInput id="password" enter="doLogin(event)" displayAsPassword="true" width="100%" height="35" />		
+		</s:VGroup>
+		
+		<s:HGroup width="100%" paddingTop="3" verticalAlign="middle">
+			<s:CheckBox id="stored" selected="true"/>
+			<s:Label click="stored.selected = !stored.selected" text="save my credentials"/>	
+			<s:HGroup horizontalAlign="right" width="100%">
+				<notificationBot:button click="doLogin(event)"/>				
+			</s:HGroup>
+		</s:HGroup>
+	</s:VGroup>
 	
-	<s:Image source="assets/images/background.png"/>	
-	
-	<s:Label x="65" y="396" fontWeight="normal" text="email address"/>
-	<s:TextInput id="email" enter="doLogin(event)" width="250" height="35" x="65" y="416" />
-	
-	<s:Label x="65" y="466" fontWeight="normal" text="password"/>
-	<s:TextInput id="password" enter="doLogin(event)" displayAsPassword="true" width="250" height="35" x="65" y="486" />
-	
-	<notificationBot:button x="231" y="557" click="doLogin(event)"/>
-	<s:Label visible="{loginFailed}" x="49" y="335" width="282" color="#FF8282" fontSize="20"
-			 fontWeight="normal" fontFamily="Myriad" text="Your credentials don't match.&#xd;Please try again."
+	<s:Label visible="{loginFailed}" width="282" color="#FF8282" fontSize="20"
+			 fontWeight="normal" fontFamily="Myriad" text="Your credentials don't match."
 			 textAlign="center"/>
-	<s:CheckBox x="65" y="529" id="stored" selected="true"/>
-	<s:Label x="82" y="534" fontSize="12" click="stored.selected = !stored.selected" text="save my credentials and start at login"/>
 	
-	<s:Image visible="{this.loading}" smooth="true" source="assets/images/loading-background.png"/>
-</s:Group>
+</s:VGroup>

@@ -3,23 +3,37 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   showStatusBar="false" xmlns:notificationBot="com.rayku.notificationBot.*"
-					   backgroundColor="#1D5B8D"
 					   initialize="init()"
+					   skinClass="appSkin"
 					   >
 	<fx:Style source="styles/global.css" />
 	
+	<fx:Script source="launcher.as" />
+	
+	<s:layout>
+		<s:VerticalLayout  horizontalAlign="center" />
+	</s:layout>
+	
 	<fx:Declarations>
-		<mx:HTTPService id="statusService" method="POST" url="http://localhost:4567/tutor/{email}/ping?token={token}" showBusyCursor="false" fault="return;"  />
+		<mx:HTTPService id="statusService" method="POST" url="http://notification-bot.rayku.com/tutor/{email}/ping?token={token}" showBusyCursor="false" fault="return;"  />
 	</fx:Declarations>
 	
 	<fx:Script>
 		<![CDATA[
+			import com.rayku.notificationBot.Logo;
+			
+			import flash.text.engine.ElementFormat;
+			import flash.text.engine.FontDescription;
+			import flash.text.engine.TextBlock;
+			import flash.text.engine.TextElement;
+			import flash.text.engine.TextLine;
+			
+			import mx.logging.Log;
 			
             [Bindable]
             private var email:String;
             [Bindable]
             private var token:String;
-		
 			
 			private function init():void{
 				var nativeApp:NativeApplication = NativeApplication.nativeApplication;
@@ -31,6 +45,10 @@
 				nativeApp.addEventListener(Event.USER_PRESENT, function():void{
 					statusService.send({status: 'available'});
 				});
+				
+				changeLogo();
+				
+				enableDrag();
 			}
 			
 			private function loadPreferences():void{
@@ -76,16 +94,37 @@
 				loginComponent.doLogin(null);
 			}
 			
+			public function changeLogo():void{
+				if (NativeApplication.supportsSystemTrayIcon) return;  
+				var appData:BitmapData = new Logo().bmp;   
+				var appIcon:Bitmap = new Bitmap(appData); 
+				InteractiveIcon(NativeApplication.nativeApplication.icon).bitmaps = [appIcon];	
+			}
+
+			private function enableDrag():void{
+				this.addEventListener(MouseEvent.MOUSE_DOWN,function():void{
+					stage.nativeWindow.startMove();
+				});				
+			}
+			
 		]]>
 	</fx:Script>
 
-    <mx:ViewStack id="viewStack">
-        <s:NavigatorContent id="login">
-            <notificationBot:login id="loginComponent" initialize="loadPreferences()" onLogin="{logged}" />
-        </s:NavigatorContent>
-        <s:NavigatorContent id="main">
-            <notificationBot:notificationArea email="{email}"  token="{token}" />
-        </s:NavigatorContent>
-    </mx:ViewStack>
+	<s:HGroup width="100%" horizontalAlign="right" paddingTop="15" paddingRight="15">
+		<s:Image mouseChildren="true" buttonMode="true" click="stage.nativeWindow.minimize();" source="@Embed('assets/images/black_close.png')" />	
+	</s:HGroup>
+	
+	<s:VGroup width="100%" height="100%" paddingTop="-15" horizontalAlign="center">
+		<s:Image source="@Embed('assets/images/small_logo.png')" />
+		
+		<mx:ViewStack id="viewStack">
+			<s:NavigatorContent id="login">
+				<notificationBot:login id="loginComponent" width="100%" height="100%" initialize="loadPreferences()" onLogin="{logged}" />
+			</s:NavigatorContent>
+			<s:NavigatorContent id="main">
+				<notificationBot:notificationArea width="100%" height="100%" email="{email}"  token="{token}" />
+			</s:NavigatorContent>
+		</mx:ViewStack>
+	</s:VGroup>
 
 </s:WindowedApplication>

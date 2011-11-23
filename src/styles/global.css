@@ -24,7 +24,7 @@ s|Label {
 	color: #fff;
 	fontSize: 16px;
 	fontWeight: bold;
-	fontFamily: Myriad;
+	fontFamily: Arial, Myriad;
 }
 
 s|TextInput {

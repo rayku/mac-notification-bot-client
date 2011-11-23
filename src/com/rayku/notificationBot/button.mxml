@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 mouseChildren="true"
-		 buttonMode="true"
+		 currentState="normal" initialize="init();"
+		 mouseChildren="true" buttonMode="true"
 		 >
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hover"/>
+	</s:states>
 	
-	<s:Image smooth="true" smoothingQuality="high" source="@Embed('/assets/images/button.png')"/>
+	<fx:Script>
+		<![CDATA[
+			
+			public function init():void {
+				var self = this;
+				
+				this.addEventListener(MouseEvent.MOUSE_OVER, function():void{
+					self.currentState = "hover";
+				});
+				
+				this.addEventListener(MouseEvent.MOUSE_OUT, function():void{
+					self.currentState = "normal";
+				});
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Image smooth="true" includeIn="normal" smoothingQuality="high" source="@Embed('/assets/images/button.png')"/>
+	<s:Image smooth="true" includeIn="hover" smoothingQuality="high" source="@Embed('/assets/images/button_hover.png')"/>
 </s:Group>
