@@ -146,22 +146,53 @@
 			}
 			
 			private function changeMenu():void{
-				var menu:NativeMenu = nativeApplication.menu;
-				var file:NativeMenuItem = menu.getItemAt(1);
-				
 				var logout:NativeMenuItem = new NativeMenuItem('Logout');
-				logout.keyEquivalent = "l";
 				logout.addEventListener(Event.SELECT, logOut); 
 				
-				file.submenu.addItemAt(logout, 0);
-				nativeApplication.menu = menu;
+				if (NativeApplication.supportsMenu){
+					logout.keyEquivalent = "l";
+					var menu:NativeMenu = nativeApplication.menu;
+					var file:NativeMenuItem = menu.getItemAt(1);
+					file.submenu.addItemAt(logout, 0);
+					nativeApplication.menu = menu;
+				}else if(NativeApplication.supportsSystemTrayIcon){
+					NativeApplication.nativeApplication.icon.bitmaps = [new Logo().bmp];
+					var showCommand: NativeMenuItem = new NativeMenuItem("Show");
+					var iconMenu:NativeMenu = new NativeMenu();
+					
+					iconMenu.addItem(showCommand);
+					showCommand.addEventListener(Event.SELECT, undock);
+					iconMenu.addItem(logout);
+					var exitCommand: NativeMenuItem = iconMenu.addItem(new NativeMenuItem("Exit"));
+					exitCommand.addEventListener(Event.SELECT, function(event:Event):void{
+						exit();
+					});
+					
+					var sysTrayIcon:SystemTrayIcon = NativeApplication.nativeApplication.icon as SystemTrayIcon;
+					sysTrayIcon.tooltip = "rayku";
+					sysTrayIcon.addEventListener(MouseEvent.CLICK,undock);
+					sysTrayIcon.menu = iconMenu;
+				}
+				
+			}
+			
+			public function dock(e:Event):void{
+				if(NativeApplication.supportsSystemTrayIcon){
+					stage.nativeWindow.visible = false;
+				}else{
+					stage.nativeWindow.minimize();					
+				}
+			}
+			
+			public function undock(e:Event):void{
+				stage.nativeWindow.visible = true;
 			}
 			
 		]]>
 	</fx:Script>
 
 	<s:HGroup width="100%" horizontalAlign="right" paddingTop="15" paddingRight="15">
-		<s:Image mouseChildren="true" buttonMode="true" click="stage.nativeWindow.minimize();" source="@Embed('assets/images/black_close.png')" />	
+		<s:Image mouseChildren="true" buttonMode="true" click="dock(event);" source="@Embed('assets/images/black_close.png')" />	
 	</s:HGroup>
 	
 	<s:VGroup width="100%" height="100%" paddingTop="-15" horizontalAlign="center">

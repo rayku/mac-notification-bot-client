@@ -53,7 +53,7 @@
 					notificationGroup.removeElement(notification);
 				if (notificationGroup.numChildren == 0) 
 					empty = true;
-				stage.nativeWindow.minimize();
+				parentApplication.dock(null);
 			}
 			
 			private function addQuestion(rawQuestion:Object):void {
@@ -68,8 +68,13 @@
 			}
 			
 			private function changeLogo():void{
-				var dockIcon:DockIcon = NativeApplication.nativeApplication.icon as DockIcon;
-				dockIcon.bounce(NotificationType.CRITICAL);
+				if(NativeApplication.supportsDockIcon){
+					var dockIcon:DockIcon = NativeApplication.nativeApplication.icon as DockIcon;
+					dockIcon.bounce(NotificationType.CRITICAL);					
+				} else if (NativeApplication.supportsSystemTrayIcon){
+					parentApplication.undock(null);
+					stage.nativeWindow.notifyUser(NotificationType.CRITICAL);
+				}
 			}
 		
 		]]>
