@@ -18,7 +18,7 @@
 	<fx:Declarations>
 		<mx:HTTPService id="statusService" method="POST" url="http://notification-bot.rayku.com/tutor/{email}/ping?token={token}" showBusyCursor="false" fault="return;"  />
 		<updater:NativeApplicationUpdater id="updater" 
-										  updateURL="http://localhost:4567/download/update.xml"
+										  updateURL="http://notification-bot.rayku.com/download/update.xml"
 										  updateStatus="onUpdate(event)"
 										  initialized="checkUpdates(event)"/>
 	</fx:Declarations>
