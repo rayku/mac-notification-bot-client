@@ -31,3 +31,10 @@ s|TextInput {
 	fontSize: 24px;
 	fontFamily: Myriad;
 }
+
+mx|ProgressBar {
+	color: #ffffff;
+	fontSize: 12px;
+	textAlign: center;
+	trackHeight: 15px;
+}

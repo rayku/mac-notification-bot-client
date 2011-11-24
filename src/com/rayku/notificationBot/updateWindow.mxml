@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.riaspace.nativeApplicationUpdater.NativeApplicationUpdater;
+			
+			import mx.controls.ProgressBar;
+			[Bindable]
+			public var onUpdate:Function;
+			
+			[Bindable]
+			public var onCancel:Function;
+			
+			[Bindable]
+			public var updater:NativeApplicationUpdater;
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup  paddingTop="20" gap="10" width="50%" horizontalAlign="center" id="updateView">
+		<s:Label maxWidth="300" color="#ffffff" fontFamily="Myriad" fontSize="20" fontWeight="normal"
+				 text="We have a new version available for download." textAlign="center"/>
+		<s:Label color="#ffffff" fontFamily="Myriad" fontSize="20" fontWeight="normal" maxWidth="200" text="Install it?"/>
+		<s:HGroup width="100%" horizontalAlign="center" gap="15">
+			<s:Image source="@Embed('assets/images/check.png')" mouseChildren="true" buttonMode="true" click="progressBar.visible = true; onUpdate()" />
+			<s:Image source="@Embed('assets/images/cancel.png')" mouseChildren="true" buttonMode="true" click="onCancel()"/>
+		</s:HGroup>
+		<s:Spacer height="5" />
+		<mx:ProgressBar width="100%" id="progressBar" labelPlacement="bottom" label="Downloading %3%" source="{updater}" visible="false" maskSkin="mx.skins.spark.ProgressBarTrackSkin" />
+	</s:VGroup>
+</s:Group>

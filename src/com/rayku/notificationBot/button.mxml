@@ -14,7 +14,7 @@
 		<![CDATA[
 			
 			public function init():void {
-				var self = this;
+				var self:Group = this;
 				
 				this.addEventListener(MouseEvent.MOUSE_OVER, function():void{
 					self.currentState = "hover";

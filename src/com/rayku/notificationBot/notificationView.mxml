@@ -81,7 +81,7 @@
 	<s:Image x="0" y="0" smooth="true" source="@Embed('/assets/images/notification-background.png')"/>
 	
 	<s:Label id="question_body" x="47" y="53" width="260" fontWeight="normal"
-			 text="{question.getBody}"/>
+			 text="{question.getBody}" maxDisplayedLines="2" toolTip="{question.getBody}"/>
 	<s:Label x="48" y="115" fontWeight="normal" styleName="darkGrey" text="{question.getGrade}"/>
 	<s:Label x="23" y="138" color="#0D2C59" fontSize="27" fontWeight="bold" text="{timeLeft}"/>
 	
