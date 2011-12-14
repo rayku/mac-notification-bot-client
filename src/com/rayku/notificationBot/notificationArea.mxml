@@ -17,6 +17,7 @@
 			import com.adobe.serialization.json.JSON;
 			import com.rayku.notificationBot.model.Question;
 			
+			import mx.core.SoundAsset;
 			import mx.logging.Log;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -65,6 +66,7 @@
 				empty = false;
 				
 				changeLogo();
+				playSound();
 			}
 			
 			private function changeLogo():void{
@@ -77,6 +79,12 @@
 				}
 			}
 		
+			private function playSound():void{
+				var audiofile = File.applicationDirectory.resolvePath('/assets/sounds/alert.mp3');
+				var alert = new Sound(new URLRequest(audiofile.nativePath));
+				alert.play();
+			}
+			
 		]]>
 	</fx:Script>
 	
