@@ -23,8 +23,6 @@
 										  initialized="checkUpdates(event)"/>
 	</fx:Declarations>
 	
-	
-	
 	<fx:Script>
 		<![CDATA[
 			import air.update.events.UpdateEvent;

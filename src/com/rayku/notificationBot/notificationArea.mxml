@@ -30,11 +30,7 @@
 			
 			[Bindable]
 			private var empty:Boolean = true;
-			
-			[Embed(source='assets/sounds/alert.mp3')]
-			private var SoundClass:Class;
-			
-			
+
 			public function init():void {
 				var timer:Timer = new Timer(5000);
 				timer.addEventListener(TimerEvent.TIMER, function():void {
@@ -84,7 +80,12 @@
 			}
 		
 			private function playSound():void{
-				var snd:Sound = new Sound(new URLRequest("../assets/sounds/alert.mp3"));
+				var path:String = "../assets/sounds/alert.mp3";
+				if(NativeApplication.supportsDockIcon){
+					path = File.applicationDirectory.resolvePath("/assets/sounds/alert.mp3").nativePath;	
+				}
+				
+				var snd:Sound = new Sound(new URLRequest(path));
 				snd.play();
 			}
 			
